@@ -5,40 +5,21 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { GrEdit } from "react-icons/gr";
 
 
-//trying to make a modal for confirmation
-{/* <div className = "flex ml-auto mr-auto">XP; {currentExp}</div>
-    {confirmationModalOpen && (
-    <ConfitmationModal
-        isOpen={confirmationModalOpen}
-        handleClose={() => setConfirmationModalOpen(!confirmationModalOpen)}
-        >
-            <div className='flex flex-col justify-between h-full w-full'>
-                <div className='flex flex-col mb-auto items-center p-8'>
-                    <span>Are you sure </span>
-                    <span>Helllooo</span>
-                </div>
-                <div className="flex flex-col sm:flex-row justify-center gap-8 align-center">
-                    <button 
-                        className="bg-red-500 text-white p-2 rounded-md" 
-                        onClick={() => 
-                            setConfirmationModalOpen(!confirmationModalOpen)}>Cancel
-                    </button>
-                    <button 
-                        className="bg-green-500 text-white p-2 rounded-md"
-                        onClick={() => handleCancelPomodoro()}
-                    >Cancel Pomodoro</button>
-
-                </div>
-            </div>
-    </ConfitmationModal> */}
-
-
 
 
 export default function index() : JSX.Element {
     const [categories , setCategories] = useState([])
     const [parentId , setParentId] = useState("")
     const [categoryName , setCategoryName] = useState("")
+    const [id , setId] = useState("")
+
+    const [modal, setModal] = useState(false);
+    
+    const handleModal = (id) => {
+    setModal(!modal);
+    setId(id)
+    }
+
     useEffect(() => {
         getData()
     }, [])
@@ -73,35 +54,62 @@ export default function index() : JSX.Element {
         axios.put(`http://localhost:8000/api/category/${id}`)
         .then(res => {
             console.log(res)
-        })
-
+        })}
        
   return (
-    <div className='flex flex-wrap gap-8'>
-        <div className='w-48'>
-            <input type='text' onChange={(e) => {setParentId(e.target.value)}}/>
-            <input type='text' onChange={(e) => {setCategoryName(e.target.value)}}/>
-            <button onClick={createCategory}>Create</button>
-        </div>
-        {categories.map((item, ind) => {
-            return(
-                <div className='w-48' key={ind}>
-                    <h1>{item.categoryName}</h1>
-                    <div className='flex'>
-                    <button onClick={() => { console.log(item?._id);
-                    editCategory(item?._id) }}>
-                    }}><GrEdit/></button>
-                    
-                    <button onClick={() => { console.log(item?._id);
-                    deleteCategory(item?._id) }}>
-                    <RiDeleteBin6Line />
-                    </button>
-                    
+    <>
+        <div className='flex flex-wrap gap-8'>
+            <div className='w-48'>
+                <input type='text' onChange={(e) => {setParentId(e.target.value)}}/>
+                <input type='text' onChange={(e) => {setCategoryName(e.target.value)}}/>
+                <button onClick={createCategory}>Create</button>
+            </div>
+            {categories.map((item, ind) => {
+                return(
+                    <div className='w-48' key={ind}>
+                        <h1>{item.categoryName}</h1>
+                        <div className='flex'>
+                            <button 
+                                onClick={()=> handleModal(item._id)}
+                                // onClick={() => { console.log(item?._id);
+                                // editCategory(item?._id) }}
+                                >
+                                <GrEdit/>
+                            </button>
+                            
+                            <button 
+                                onClick={() => { console.log(item?._id);
+                                deleteCategory(item?._id) }}>
+                                <RiDeleteBin6Line />
+                            </button>
+                        </div>
                     </div>
+                )
+            })}
+        </div>
+        {modal && (
+            <div className='modal'>
+                <div 
+                    onClick={handleModal} 
+                    className='overlay'>
                 </div>
-            )
-        })}
-    </div>
+                <div className='modal-content'>
+                    <h2>Hello modal</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum beatae saepe nesciunt veritatis omnis expedita consequuntur minus obcaecati. Temporibus beatae, illo exercitationem ut laboriosam iste nulla officiis sint corrupti non fugiat aliquam voluptatum consequuntur, tempore architecto delectus debitis repellat? Non labore similique obcaecati, vero culpa dolore libero adipisci veniam dolorem?
+                    </p>
+                    <p>{id}</p>
+                <button 
+                className='close-modal'
+                onClick={handleModal}
+                >
+                    Close
+                </button>
+            </div>
+        </div>
+        )}
+       
+    </>
   )
 }
 
