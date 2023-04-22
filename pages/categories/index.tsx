@@ -3,7 +3,7 @@ import axios from "axios"
 
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { GrEdit } from "react-icons/gr";
-
+import styles from "./Modal.module.css"
 
 
 
@@ -88,19 +88,19 @@ export default function index() : JSX.Element {
             })}
         </div>
         {modal && (
-            <div className='modal'>
+            <div className={styles.modal}>
                 <div 
                     onClick={handleModal} 
-                    className='overlay'>
+                    className={styles.overlay}>
                 </div>
-                <div className='modal-content'>
+                <div className={styles.modalContent}>
                     <h2>Hello modal</h2>
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum beatae saepe nesciunt veritatis omnis expedita consequuntur minus obcaecati. Temporibus beatae, illo exercitationem ut laboriosam iste nulla officiis sint corrupti non fugiat aliquam voluptatum consequuntur, tempore architecto delectus debitis repellat? Non labore similique obcaecati, vero culpa dolore libero adipisci veniam dolorem?
                     </p>
                     <p>{id}</p>
                 <button 
-                className='close-modal'
+                className={styles.closeModal}
                 onClick={handleModal}
                 >
                     Close
