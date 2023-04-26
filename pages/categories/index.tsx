@@ -4,20 +4,24 @@ import axios from "axios"
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { GrEdit } from "react-icons/gr";
 import styles from "./Modal.module.css"
+import { Console } from 'console';
 
 
 
 export default function index() : JSX.Element {
     const [categories , setCategories] = useState([])
     const [parentId , setParentId] = useState("")
-    const [categoryName , setCategoryName] = useState("")
+    const [newCat , setNewCat] = useState("")
     const [id , setId] = useState("")
+    const [catName , setCatName] = useState("")
 
     const [modal, setModal] = useState(false);
+    const [editCat, setEditCat] = useState("");
     
-    const handleModal = (id) => {
-    setModal(!modal);
-    setId(id)
+    const handleModal = (id, catName) => {
+        setModal(!modal);
+        setId(id)
+        setCatName(catName)
     }
 
     useEffect(() => {
@@ -30,38 +34,45 @@ export default function index() : JSX.Element {
             setCategories(res.data.result)
         })
         console.log(categories);}
+
     const createCategory = () => {
         axios.post("http://localhost:8000/api/category" , {
             parentId : parentId,
-            categoryName: categoryName
+            categoryName: newCat
         })
         .then(res => {
             console.log(res)
+            getData()
         })
-        getData()
     }
 
     const deleteCategory = (id : any) => {
         axios.delete(`http://localhost:8000/api/category/${id}`)
         .then(res => {
             console.log(res)
+            getData()
         })
-        getData()
     }
        console.log(categories);
 
-    const editCategory = (id : any) => {
-        axios.put(`http://localhost:8000/api/category/${id}`)
+    const catEditor = (id : any) => {
+        axios.put(`http://localhost:8000/api/category/${id}`,{
+            parentId : parentId,
+            categoryName: editCat
+        })
         .then(res => {
             console.log(res)
-        })}
+            getData();
+            handleModal()
+        })
+    }
        
   return (
     <>
         <div className='flex flex-wrap gap-8'>
             <div className='w-48'>
                 <input type='text' onChange={(e) => {setParentId(e.target.value)}}/>
-                <input type='text' onChange={(e) => {setCategoryName(e.target.value)}}/>
+                <input type='text' onChange={(e) => {setNewCat(e.target.value)}}/>
                 <button onClick={createCategory}>Create</button>
             </div>
             {categories.map((item, ind) => {
@@ -70,7 +81,7 @@ export default function index() : JSX.Element {
                         <h1>{item.categoryName}</h1>
                         <div className='flex'>
                             <button 
-                                onClick={()=> handleModal(item._id)}
+                                onClick={()=> handleModal(item._id, item.categoryName)}
                                 // onClick={() => { console.log(item?._id);
                                 // editCategory(item?._id) }}
                                 >
@@ -95,13 +106,24 @@ export default function index() : JSX.Element {
                 </div>
                 <div className={styles.modalContent}>
                     <h2>Hello modal</h2>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum beatae saepe nesciunt veritatis omnis expedita consequuntur minus obcaecati. Temporibus beatae, illo exercitationem ut laboriosam iste nulla officiis sint corrupti non fugiat aliquam voluptatum consequuntur, tempore architecto delectus debitis repellat? Non labore similique obcaecati, vero culpa dolore libero adipisci veniam dolorem?
-                    </p>
                     <p>{id}</p>
+                    <p>{catName}</p>
+                    <form>
+                        <label>Өөрчлөх утгаа оруулна уу</label>
+                        <input 
+                            type="text" 
+                            onChange={(e) => {setEditCat(e.target.value)}}
+                        />
+                    </form>
+                    <button
+                        onClick={()=> { console.log(id, editCat)
+                            catEditor(id, editCat)}}
+                    >
+                        Save
+                    </button>
                 <button 
-                className={styles.closeModal}
-                onClick={handleModal}
+                    className={styles.closeModal}
+                    onClick={handleModal}
                 >
                     Close
                 </button>
