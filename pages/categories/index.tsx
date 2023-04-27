@@ -3,7 +3,7 @@ import axios from "axios"
 
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { GrEdit } from "react-icons/gr";
-import styles from "./Modal.module.css"
+import styles from "../Modal.module.css"
 import { Console } from 'console';
 
 
