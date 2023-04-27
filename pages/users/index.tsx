@@ -11,9 +11,12 @@ export default function index(): JSX.Element {
 
 
   const [modal, setModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [id, setId] = useState("");
+
   const [newUser, setNewUser] = useState({});
+  const [tempUser, setTempUser] = useState({});
   const [editUser, setEditUser] = useState({});
-  
   const registerUser = async (event: any) => {
     event.preventDefault();
     const data: IUser = {
@@ -55,7 +58,8 @@ export default function index(): JSX.Element {
 
   const handleModal = (id) => {
       setModal(!modal);
-      // setId(id)
+      setIsEditing(!isEditing);
+      setId(id)
   }
 
 
@@ -65,7 +69,7 @@ export default function index(): JSX.Element {
 
 
   const getData = () => {
-    axios.get("http://localhost:8000/api/user")
+    axios.get("http://localhost:8000/api/users")
     .then(res => {
       setUsers(res.data.result)
     })
@@ -120,6 +124,9 @@ export default function index(): JSX.Element {
   return (
     <>
       <div className='flex flex-wrap gap-8'>
+        <button
+          onClick={() => handleModal()}>+
+        </button>
         {users.map((item, ind) => {
           return(
             <div className='w-48'>
@@ -128,7 +135,7 @@ export default function index(): JSX.Element {
               <p>{item.email}</p>
               <div className='flex'>
                   <button 
-                    onClick={()=> handleModal(item._id)}
+                    onClick={()=> { console.log(item?._id); handleModal(item?._id)}}
                                 // onClick={() => { console.log(item?._id);
                                 // editCategory(item?._id) }}
                                 >
