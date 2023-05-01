@@ -15,7 +15,20 @@ export default function index(): JSX.Element {
   const [id, setId] = useState("");
 
   const [newUser, setNewUser] = useState({});
-  const [tempUser, setTempUser] = useState({});
+  const [tempUser, setTempUser] = useState({
+    firstName: "",
+    lastName: "",
+    Username: "",
+    birthDate: "",
+    email: "",
+    phoneNumber: 0,
+    address: "",
+    role: "",
+    favItems: [""],
+    gender: "",
+    profilePic: "",
+    password: ""
+  });
   const [editUser, setEditUser] = useState({});
   const registerUser = async (event: any) => {
     event.preventDefault();
@@ -56,7 +69,7 @@ export default function index(): JSX.Element {
   };
 
 
-  const handleModal = (id) => {
+  const handleModal = (id: any) => {
       setModal(!modal);
       setIsEditing(!isEditing);
       setId(id)
@@ -118,7 +131,6 @@ export default function index(): JSX.Element {
   //         handleModal()
   //     })
   // }
-     
 
   
   return (
@@ -135,12 +147,24 @@ export default function index(): JSX.Element {
               <p>{item.email}</p>
               <div className='flex'>
                   <button 
-                    onClick={()=> { console.log(item?._id); handleModal(item?._id)}}
-                                // onClick={() => { console.log(item?._id);
-                                // editCategory(item?._id) }}
-                                >
-                                <GrEdit/>
-                            </button>
+                    onClick={()=> { console.log(item?._id); handleModal(item?._id)
+                    // setTempUser( 
+                    // firstName: {item?.firstName}
+                    // lastName: {item?.lastName},
+                    // Username: {item?.Username},
+                    // birthDate: {item?.birthDate},
+                    // email: {item?.email},
+                    // phoneNumber: {item?.phoneNumber},
+                    // address: {item?.address},
+                    // role: {item?.role},
+                    // favItems: {item?.favItems},
+                    // gender: {item?.gender}
+                    // profilePic: {item?.profilePic}
+                    // password: {item?.password})
+                  }}
+                  >
+                    <GrEdit/>
+                  </button>
                 <RiDeleteBin6Line />
               </div>
             </div>
@@ -327,7 +351,6 @@ export default function index(): JSX.Element {
             </div>
         </div>
         )}
-       
     </>
   )
 }
