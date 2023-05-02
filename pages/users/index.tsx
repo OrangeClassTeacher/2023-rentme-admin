@@ -16,7 +16,7 @@ export default function index(): JSX.Element {
 
   const [newUser, setNewUser] = useState({});
   const [tempUser, setTempUser] = useState({
-    firstName: "",
+    firstName: "hi",
     lastName: "",
     Username: "",
     birthDate: "",
@@ -111,14 +111,14 @@ export default function index(): JSX.Element {
   //     })
   // }
 
-  // const deleteUser = (id : any) => {
-  //     axios.delete(`http://localhost:8000/api/category/${id}`)
-  //     .then(res => {
-  //         console.log(res)
-  //         getData()
-  //     })
-  // }
-  //    console.log(categories);
+  const deleteUser = (id : any) => {
+      axios.delete(`http://localhost:8000/api/user/${id}`)
+      .then(res => {
+          console.log(res)
+          getData()
+      })
+  }
+     console.log(users);
 
   // const userEditor = (id : any) => {
   //     axios.put(`http://localhost:8000/api/category/${id}`,{
@@ -143,29 +143,42 @@ export default function index(): JSX.Element {
           return(
             <div className='w-48'>
               <h1>{item.firstName}</h1>
+              <p>{item.lastName}</p>
               <p>{item.Username}</p>
+              <p>{item.birthDate}</p>
               <p>{item.email}</p>
+              <p>{item.phoneNumber}</p>
+              <p>{item.address}</p>
+              <p>{item.role}</p>
+              <p>{item.favItems}</p>
+              <p>{item.gender}</p>
+              <p>{item.profilePic}</p>
+              <p>{item.password}</p>
               <div className='flex'>
                   <button 
                     onClick={()=> { console.log(item?._id); handleModal(item?._id)
-                    // setTempUser( 
-                    // firstName: {item?.firstName}
-                    // lastName: {item?.lastName},
-                    // Username: {item?.Username},
-                    // birthDate: {item?.birthDate},
-                    // email: {item?.email},
-                    // phoneNumber: {item?.phoneNumber},
-                    // address: {item?.address},
-                    // role: {item?.role},
-                    // favItems: {item?.favItems},
-                    // gender: {item?.gender}
-                    // profilePic: {item?.profilePic}
-                    // password: {item?.password})
+                    // setTempUser({ 
+                    //   firstName: {item?.firstName},
+                    //   lastName: {item?.lastName},
+                    //   Username: {item?.Username},
+                    //   birthDate: {item?.birthDate},
+                    //   email: {item?.email},
+                    //   phoneNumber: {item?.phoneNumber},
+                    //   address: {item?.address},
+                    //   role: {item?.role},
+                    //   favItems: {item?.favItems},
+                    //   gender: {item?.gender}
+                    //   profilePic: {item?.profilePic}
+                    //   password: {item?.password}
+                    // })
                   }}
                   >
                     <GrEdit/>
                   </button>
-                <RiDeleteBin6Line />
+                  <button
+                    onClick={()=>deleteUser(item?._id)}>
+                    <RiDeleteBin6Line />
+                  </button>
               </div>
             </div>
           )
@@ -201,6 +214,7 @@ export default function index(): JSX.Element {
               id="firstName"
               className="border border-border-2 w-full py-[12px] px-[22px] rounded-lg focus:outline-none focus:ring-2 focus:ring-color-1 text-text text-md-regular"
               placeholder="Нэр"
+              value={tempUser.firstName}
             />
           </div>
 
