@@ -73,31 +73,47 @@ export default function index() : JSX.Element {
             <div className='w-48'>
                 <input type='text' onChange={(e) => {setParentId(e.target.value)}}/>
                 <input type='text' onChange={(e) => {setNewCat(e.target.value)}}/>
-                <button onClick={createCategory}>Create</button>
+                <button 
+                    className = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                    onClick={createCategory}
+                    >Create Category
+                </button>
             </div>
-            {categories.map((item, ind) => {
-                return(
-                    <div className='w-48' key={ind}>
-                        <h1>{item.categoryName}</h1>
-                        <div className='flex'>
-                            <button 
-                                onClick={()=> handleModal(item._id, item.categoryName)}
-                                // onClick={() => { console.log(item?._id);
-                                // editCategory(item?._id) }}
-                                >
-                                <GrEdit/>
-                            </button>
-                            
-                            <button 
-                                onClick={() => { console.log(item?._id);
-                                deleteCategory(item?._id) }}>
-                                <RiDeleteBin6Line />
-                            </button>
-                        </div>
-                    </div>
-                )
-            })}
+            <div className='w-full'>
+                <table className='w-full'>
+                    <thead>
+                        <tr className='border border-indigo-600'>
+                            <th>№</th>
+                            <th>Parent category</th>
+                            <th>Category name</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    {categories.map((item, ind) => {
+                        return(
+                            <tr className='border border-indigo-600'>
+                                <td>{ind + 1}</td>
+                                <td>{item.parentId}</td>
+                                <td>{item.categoryName}</td>
+                                <td className='flex gap-1'>
+                                    <button 
+                                        onClick={()=> handleModal(item._id, item.categoryName)}
+                                        className='bg-yellow-500 hover:bg-yellow-700 text-font-bold py-2 px-4 flex text-xl justify-center rounded'
+                                        ><GrEdit/>
+                                    </button>
+                                    <button 
+                                        onClick={() => deleteCategory(item?._id) }
+                                        className="bg-red-500 hover:bg-orange-700 text-white flex justify-center text-xl font-bold py-2 px-4 rounded "
+                                        ><RiDeleteBin6Line />
+                                    </button>
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
         </div>
+    </div>
         {modal && (
             <div className={styles.modal}>
                 <div 
