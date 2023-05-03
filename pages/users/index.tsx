@@ -7,19 +7,16 @@ import { IUser } from "../../interfaces/user";
 import { CiCircleRemove } from "react-icons/ci";
 import styles from "../Modal.module.css";
 
-export default function index(): JSX.Element {
+export default function Index(): JSX.Element {
   const [users, setUsers] = useState([]);
 
   const [modal, setModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [id, setId] = useState("");
   const [userData, setUserData] = useState({});
-  const [newUser, setNewUser] = useState({});
-  const [editUser, setEditUser] = useState({});
   const registerUser = async (event: any) => {
-    console.log("chekc");
     event.preventDefault();
-    const data: IUser = {
+    const data = {
       firstName: event.target.firstName.value,
       lastName: event.target.lastName.value,
       Username: event.target.username.value,
@@ -33,29 +30,29 @@ export default function index(): JSX.Element {
       profilePic: "hi",
       password: event.target.password.value,
     };
-
-    if (id != "") {
-      console.log("edit");
-
-      setEditUser(data);
- 
-    } else if (!id) {
-      setNewUser(data);
- 
-    }
     try {
-      if (newUser && !id) {
+      if (id) {
+        console.log("editUser", data);
+
         axios
-          .post("http://localhost:8000/api/user", newUser)
-          .then((res) => {console.log(res.data.result) , getData()})
-          .catch((err) => console.log(err));
-      } else if (editUser && id) {
-        axios
-          .put(`http://localhost:8000/api/user/${id}`, editUser)
-          .then((res) => {console.log(res.data.result) , getData() })
-          .catch((err) =>{ console.log(err);
+          .put(`http://localhost:8000/api/user/${id}`, data)
+          .then((res) => {
+            getData();
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        
+        setId("");
+      } else {
+        console.log("createUser", data);
+
+        axios
+          .post("http://localhost:8000/api/user", data)
+          .then((res) => {
+            console.log(res.data.result);
+          })
+          .catch((err) => console.log(err));
+        getData();
       }
     } catch (error) {
       console.log(error);
@@ -66,10 +63,11 @@ export default function index(): JSX.Element {
     setModal(!modal);
     setIsEditing(!isEditing);
     setId(id);
+
     axios
       .get(`http://localhost:8000/api/user/${id}`)
       .then((res) => setUserData(res.data.result));
-      getData()
+    getData();
   };
 
   useEffect(() => {
@@ -80,7 +78,6 @@ export default function index(): JSX.Element {
     axios.get("http://localhost:8000/api/users").then((res) => {
       setUsers(res.data.result);
     });
-    console.log(users);
   };
 
   const deleteUser = (id: any) => {
@@ -96,7 +93,9 @@ export default function index(): JSX.Element {
       <div className="flex flex-wrap gap-8">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-          onClick={handleModal}
+          onClick={() => {
+            handleModal(), setId("");
+          }}
         >
           Create User
         </button>
@@ -120,7 +119,7 @@ export default function index(): JSX.Element {
             <tbody>
               {users.map((item, ind) => {
                 return (
-                  <tr className="border border-indigo-600">
+                  <tr key={ind} className="border border-indigo-600">
                     <td>{ind + 1}</td>
                     <td>{item.firstName}</td>
                     <td>{item.lastName}</td>
@@ -328,7 +327,6 @@ export default function index(): JSX.Element {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  
                   className="bg-transparent hover:bg-teal-500 text-teal-700 font-semibold hover:text-white py-2 px-4 border border-teal-500 hover:border-transparent rounded"
                 >
                   Save
