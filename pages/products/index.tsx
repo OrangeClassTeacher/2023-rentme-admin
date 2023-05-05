@@ -58,6 +58,7 @@ export default function Index() : JSX.Element {
             axios
               .post("http://localhost:8000/api/item", data)
               .then((res) => {
+                handleModal();
                 console.log(res.data.result);
               })
               .catch((err) => console.log(err));
